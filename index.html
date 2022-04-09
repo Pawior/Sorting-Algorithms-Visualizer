@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        font-family: "Helvetica Neue", Helvetica;
+      }
+      #column-container {
+        display: flex;
+        gap: 1px;
+        /* -webkit-transform: rotateX(180deg); */
+        transform: rotateX(180deg);
+      }
+      .column {
+        width: 20px;
+        background-color: aqua;
+        display: block;
+      }
+      .btn {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>VISUALIZER</h1>
+    <div id="container">
+      <div id="column-container"></div>
+      <button class="btn" id="bogo">bogo</button>
+      <button class="btn" id="bubble">bubble</button>
+    </div>
+    <script>
+      let arr = [];
+      let columnContainer = document.querySelector("#column-container");
+      for (let i = 0; i < 10; i++) {
+        var x = Math.floor(Math.random() * 40) + 1;
+        arr.push(x);
+        let column = document.createElement("div");
+        column.id = `col_${i}`;
+        column.style.order = i;
+        column.className = "column";
+        column.classList.add("cosafaumn");
+        column.style.height = `${x}px`;
+        columnContainer.appendChild(column);
+      }
+
+      /**----------------------
+       *    Sorting
+       *------------------------**/
+      const waitForMe = (milisec, data) => {
+        return new Promise((resolve, reject) => {
+          try {
+            setTimeout(() => {
+              resolve(data);
+            }, milisec);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      };
+
+      let btnBubble = document.querySelector("#bubble");
+      btnBubble.addEventListener("click", () => {
+        console.log(arr);
+        notSorted = true;
+        while (notSorted) {
+          let sthSorted = false;
+          for (let i = 0; i < arr.length - 1; i++) {
+            console.log(i);
+            setTimeout(() => {}, timeout);
+            document.querySelector(`#col_${i}`).style.backgroundColor = "red";
+            if (arr[i] > arr[i + 1]) {
+              [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+              sthSorted = true;
+            }
+          }
+          if (!sthSorted) {
+            notSorted = false;
+          }
+        }
+        console.log(arr);
+      });
+    </script>
+  </body>
+</html>
