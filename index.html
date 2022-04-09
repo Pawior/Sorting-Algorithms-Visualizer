@@ -16,7 +16,7 @@
         transform: rotateX(180deg);
       }
       .column {
-        width: 20px;
+        width: 30px;
         background-color: aqua;
         display: block;
       }
@@ -35,8 +35,8 @@
     <script>
       let arr = [];
       let columnContainer = document.querySelector("#column-container");
-      for (let i = 0; i < 10; i++) {
-        var x = Math.floor(Math.random() * 40) + 1;
+      for (let i = 0; i < 500; i++) {
+        var x = Math.floor(Math.random() * 400) + 1;
         arr.push(x);
         let column = document.createElement("div");
         column.id = `col_${i}`;
@@ -46,15 +46,36 @@
         column.style.height = `${x}px`;
         columnContainer.appendChild(column);
       }
-
+      console.log(arr);
       /**----------------------
        *    Sorting
        *------------------------**/
-      const waitForMe = (milisec, data) => {
+      const waitForMe = (milisec, i) => {
         return new Promise((resolve, reject) => {
           try {
+            // document.querySelector(`#col_${i}`).style.backgroundColor = "aqua";
+            // document.querySelector(`#col_${i + 1}`).style.backgroundColor =
+            //   "aqua";
             setTimeout(() => {
-              resolve(data);
+              let sthSorted;
+              let col = document.querySelector(`#col_${i}`);
+              let colOrder = col.style.order;
+              let colId = col.id;
+              let col1 = document.querySelector(`#col_${i + 1}`);
+              let col1Order = col1.style.order;
+              let col1Id = col1.id;
+              console.log(colOrder, col1Order);
+              col.style.backgroundColor = "aqua";
+              col1.style.backgroundColor = "aqua";
+              if (arr[i] > arr[i + 1]) {
+                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+                col.style.order = col1Order;
+                col1.style.order = colOrder;
+                col.id = col1Id;
+                col1.id = colId;
+                sthSorted = true;
+              }
+              resolve(sthSorted);
             }, milisec);
           } catch (error) {
             reject(error);
@@ -63,19 +84,19 @@
       };
 
       let btnBubble = document.querySelector("#bubble");
-      btnBubble.addEventListener("click", () => {
+      btnBubble.addEventListener("click", async () => {
         console.log(arr);
         notSorted = true;
         while (notSorted) {
           let sthSorted = false;
           for (let i = 0; i < arr.length - 1; i++) {
-            console.log(i);
-            setTimeout(() => {}, timeout);
             document.querySelector(`#col_${i}`).style.backgroundColor = "red";
-            if (arr[i] > arr[i + 1]) {
-              [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+            document.querySelector(`#col_${i + 1}`).style.backgroundColor =
+              "red";
+            if (await waitForMe(0, i)) {
               sthSorted = true;
             }
+            console.log(sthSorted);
           }
           if (!sthSorted) {
             notSorted = false;
@@ -86,3 +107,14 @@
     </script>
   </body>
 </html>
+
+<script>
+  /**============================================
+   *               TO DO LISTA
+   *
+   * -Speed controller np. input range
+   * -Zmienianie ilosci column np. input rangem
+   * -BOGO!!!
+   * -Refresh Button
+   *=============================================**/
+</script>
