@@ -1,3 +1,3 @@
 # Sorting Algorithms Visualizer
 
-![GIF]("./preview/preview.gif")
+![GIF](./preview/preview.gif)
