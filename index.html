@@ -33,9 +33,12 @@
       <button class="btn" id="bubble">bubble</button>
     </div>
     <script>
+      /**----------------------
+       *    Initialization, creating random columns
+       *------------------------**/
       let arr = [];
       let columnContainer = document.querySelector("#column-container");
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 4; i++) {
         var x = Math.floor(Math.random() * 400) + 1;
         arr.push(x);
         let column = document.createElement("div");
@@ -47,15 +50,19 @@
         columnContainer.appendChild(column);
       }
       console.log(arr);
+      /**============================================
+       *               SORTING
+       *=============================================**/
+
+      let btnBogo = document.querySelector("#bogo");
+      let btnBubble = document.querySelector("#bubble");
+
       /**----------------------
-       *    Sorting
+       *    Bubble
        *------------------------**/
-      const waitForMe = (milisec, i) => {
+      const waitForMeBuble = (milisec, i) => {
         return new Promise((resolve, reject) => {
           try {
-            // document.querySelector(`#col_${i}`).style.backgroundColor = "aqua";
-            // document.querySelector(`#col_${i + 1}`).style.backgroundColor =
-            //   "aqua";
             setTimeout(() => {
               let sthSorted;
               let col = document.querySelector(`#col_${i}`);
@@ -83,7 +90,6 @@
         });
       };
 
-      let btnBubble = document.querySelector("#bubble");
       btnBubble.addEventListener("click", async () => {
         console.log(arr);
         notSorted = true;
@@ -93,7 +99,7 @@
             document.querySelector(`#col_${i}`).style.backgroundColor = "red";
             document.querySelector(`#col_${i + 1}`).style.backgroundColor =
               "red";
-            if (await waitForMe(100, i)) {
+            if (await waitForMeBuble(100, i)) {
               sthSorted = true;
             }
             console.log(sthSorted);
@@ -101,6 +107,66 @@
           if (!sthSorted) {
             notSorted = false;
           }
+        }
+        console.log(arr);
+      });
+
+      /**----------------------
+       *    BOGO !!!
+       *------------------------**/
+
+      const waitForMeBogo = async (milisec, i, i2) => {
+        return new Promise((resolve, reject) => {
+          try {
+            setTimeout(() => {
+              let col1 = document.querySelector(`#col_${i2}`);
+              let col = document.querySelector(`#col_${i}`);
+              let isSorted = true;
+              for (let x = 0; x < arr.length - 1; x++) {
+                if (arr[x] > arr[x + 1]) {
+                  isSorted = false;
+                }
+              }
+              if (isSorted) {
+                resolve(true);
+                col.style.backgroundColor = "aqua";
+                col1.style.backgroundColor = "aqua";
+              } else {
+                let sthSorted;
+                let colOrder = col.style.order;
+                let colId = col.id;
+                let col1Order = col1.style.order;
+                let col1Id = col1.id;
+                console.log(colOrder, col1Order);
+                col.style.backgroundColor = "aqua";
+                col1.style.backgroundColor = "aqua";
+
+                [arr[i], arr[i2]] = [arr[i2], arr[i]];
+                col.style.order = col1Order;
+                col1.style.order = colOrder;
+                col.id = col1Id;
+                col1.id = colId;
+
+                resolve(false);
+              }
+            }, milisec);
+          } catch (err) {
+            reject(err);
+          }
+        });
+      };
+
+      btnBogo.addEventListener("click", async () => {
+        notSorted = true;
+        while (notSorted) {
+          var i = Math.floor(Math.random() * 4);
+          var i2 = Math.floor(Math.random() * 4);
+          document.querySelector(`#col_${i}`).style.backgroundColor = "red";
+          document.querySelector(`#col_${i2}`).style.backgroundColor = "red";
+          if (await waitForMeBogo(100, i, i2)) {
+            notSorted = false;
+          }
+          console.log(arr);
         }
         console.log(arr);
       });
@@ -114,7 +180,8 @@
    *
    * -Speed controller np. input range
    * -Zmienianie ilosci column np. input rangem
-   * -BOGO!!!
+   * -BOGO!!! [X]
    * -Refresh Button
+   * -Licznik ile zajmuje sortowanie
    *=============================================**/
 </script>
